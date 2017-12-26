@@ -13,6 +13,8 @@ import org.fiberhome.util.http.HttpRequestUtil;
 import org.fiberhome.util.http.SynchronizationUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestServlet extends HttpServlet {
 
@@ -20,12 +22,13 @@ public class TestServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = LoggerFactory.getLogger(TestServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("Test Servlet doGet");
+		logger.info("Test Servlet doGet");
 		
-		HttpRequestUtil.getRequestInfo(req, true, true);
+		HttpRequestUtil.getRequestInfo(req, true);
 
 		JSONObject json = new JSONObject();
 		try {
@@ -39,11 +42,11 @@ public class TestServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("Test Servlet doPost");
+		logger.info("Test Servlet doPost");
 
 		req.setCharacterEncoding("utf-8");
 		
-		Map<String, Object> reqMap = HttpRequestUtil.getRequestInfo(req, true, true);
+		Map<String, Object> reqMap = HttpRequestUtil.getRequestInfo(req, true);
 		if(reqMap.get(HttpRequestUtil.DATA) == null){
 			return;
 		}

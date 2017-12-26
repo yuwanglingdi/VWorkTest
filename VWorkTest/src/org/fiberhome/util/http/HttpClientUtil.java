@@ -21,6 +21,8 @@ import org.apache.http.util.EntityUtils;
 import org.fiberhome.util.ConfigUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Http工具类
@@ -32,6 +34,8 @@ public class HttpClientUtil {
 	
 	public static final String HEADER = "HEADER";
 	public static final String CONTENT = "CONTENT";
+	
+	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
 	/**
 	 * @author lzf
@@ -62,15 +66,15 @@ public class HttpClientUtil {
 			for(Header header : headerArr){
 				String name = header.getName();
 				String value = header.getValue();
-				System.out.println("Header name " + name + " value " + value);
+				logger.info("Header name {} value {}", name, value);
 			}
 			HttpEntity entity = resp.getEntity();
 			String entityStr = EntityUtils.toString(entity, "UTF-8");
 			resultMap.put(CONTENT, entityStr);
-			System.out.println(resp.getStatusLine());
+			logger.info(resp.getStatusLine().toString());
 			if (entity != null) {
-				System.out.println("Response content length = " + entity.getContentLength());
-				System.out.println("Response content is:\n" + entityStr);
+				logger.info("Response content length = {}", entity.getContentLength());
+				logger.info("Response content is:\n {}", entityStr);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -123,15 +127,15 @@ public class HttpClientUtil {
 			for(Header header : headerArr){
 				String name = header.getName();
 				String value = header.getValue();
-				System.out.println("Header name " + name + " value " + value);
+				logger.info("Header name {} value {}", name, value);
 			}
 			HttpEntity entity = resp.getEntity();
 			String entityStr = EntityUtils.toString(entity, "UTF-8");
 			resultMap.put(CONTENT, entityStr);
 
 			if (null != entity) {
-				System.out.println(resp.getStatusLine());
-				System.out.println("Response content is : \n" + entityStr);
+				logger.info(resp.getStatusLine().toString());
+				logger.info("Response content is : \n{}", entityStr);
 			}
 			resp.close();
 		} catch (IOException e) {
@@ -170,7 +174,7 @@ public class HttpClientUtil {
 	public static String getAccessTokenString(String url, String ... args) {
 		String accessTokenString = "";
 		if(args.length < 3){
-			System.out.println("参数错误");
+			logger.info("参数错误");
 			return "";
 		}
 		String accessType = args[0];

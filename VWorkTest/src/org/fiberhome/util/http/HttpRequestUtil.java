@@ -10,13 +10,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class HttpRequestUtil {
 
 	public static final String HEADER = "HEADER";
 	public static final String PARAM = "PARAM";
 	public static final String DATA = "DATA";
 	
-	public static Map<String, Object> getRequestInfo(HttpServletRequest req, boolean printFlag, boolean returnFlag) {
+	private static final Logger logger = LoggerFactory.getLogger(HttpRequestUtil.class);
+	
+	public static Map<String, Object> getRequestInfo(HttpServletRequest req, boolean returnFlag) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
@@ -30,9 +35,7 @@ public class HttpRequestUtil {
 		Enumeration<String> headerNames = req.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String headerName = headerNames.nextElement();
-			if(printFlag){
-				System.out.println("Header name " + headerName + " value " + req.getHeader(headerName));
-			}
+			logger.info("Header name {} value {}", headerName, req.getHeader(headerName));
 			if(returnFlag){
 				headerMap.put(headerName, req.getHeader(headerName));
 			}
@@ -43,9 +46,7 @@ public class HttpRequestUtil {
 		Enumeration<String> paramNames = req.getParameterNames();
 		while (paramNames.hasMoreElements()) {
 			String paramName = paramNames.nextElement();
-			if(printFlag){
-				System.out.println("Parameter name " + paramName + " value " + req.getParameter(paramName));
-			}
+			logger.info("Parameter name {} value {}", paramName, req.getParameter(paramName));
 			if(returnFlag){
 				paramMap.put(paramName, req.getParameter(paramName));
 			}
@@ -68,9 +69,7 @@ public class HttpRequestUtil {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		if(printFlag){
-			System.out.println("Data " + dataStr);
-		}
+		logger.info("Data {}", dataStr);
 		if(returnFlag){
 			resultMap.put(DATA, dataStr);
 		}
