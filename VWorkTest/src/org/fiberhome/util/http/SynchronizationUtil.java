@@ -44,16 +44,50 @@ public class SynchronizationUtil {
 			JSONArray userArr = synUserJson.getJSONArray("resultList");
 			for(int i=0; i<userArr.length(); i++){
 				JSONObject userJson = userArr.getJSONObject(i);
-				logger.info("changeVersion " + userJson.getInt("changeVersion"));
-				logger.info("name " + userJson.getString("name"));
-				logger.info("realname " + userJson.getString("realname"));
-				logger.info("status " + userJson.getInt("status"));
-				logger.info("userId " + userJson.getString("userId"));
-				if(userJson.has("entExtend")){
-					logger.info("entExtend " + userJson.get("entExtend"));
+				if(userJson.has("changeVersion")){
+					logger.info("changeVersion " + userJson.getInt("changeVersion"));
 				}
-				logger.info("account " + userJson.getString("account"));
-				logger.info("\n");
+				if(userJson.has("name")){
+					logger.info("name " + userJson.getString("name"));
+				}
+				if(userJson.has("realname")){
+					logger.info("realname " + userJson.getString("realname"));
+				}
+				if(userJson.has("status")){
+					logger.info("status " + userJson.getInt("status"));
+				}
+				if(userJson.has("userId")){
+					logger.info("userId " + userJson.getString("userId"));
+				}
+				if(userJson.has("entExtend")){
+					JSONArray tempJsonArr = new JSONArray(userJson.get("entExtend").toString());
+					JSONObject entExtendJson = tempJsonArr.getJSONObject(0);
+					if(userJson.has("duty")){
+						logger.info("duty {}", entExtendJson.getString("duty"));
+					}
+					if(userJson.has("用户名")){
+						logger.info("用户名 {}", entExtendJson.getString("用户名"));
+					}
+					if(userJson.has("isFirstLogin")){
+						logger.info("isFirstLogin {}", entExtendJson.getString("isFirstLogin"));
+					}
+					if(userJson.has("orgCode")){
+						logger.info("orgCode {}", entExtendJson.getString("orgCode"));
+					}
+					if(userJson.has("bizStatus")){
+						logger.info("bizStatus {}", entExtendJson.getInt("bizStatus"));
+					}
+					if(userJson.has("orderNum")){
+						logger.info("orderNum {}", entExtendJson.getInt("orderNum"));
+					}
+					if(userJson.has("orgID")){
+						logger.info("orgID {}", entExtendJson.getString("orgID"));
+					}
+				}
+				if(userJson.has("account")){
+					logger.info("account " + userJson.getString("account"));
+				}
+				System.out.println();
 				
 				changeVersion = Math.max(changeVersion, userJson.getInt("changeVersion"));
 			}
@@ -80,16 +114,34 @@ public class SynchronizationUtil {
 			JSONArray unitArr = synUnitJson.getJSONArray("resultList");
 			for(int i=0; i<unitArr.length(); i++){
 				JSONObject unitJson = unitArr.getJSONObject(i);
-				logger.info("changeVersion " + unitJson.getInt("changeVersion"));
-				logger.info("enterpriseID " + unitJson.getInt("enterpriseID"));
-				logger.info("leaf " + unitJson.getInt("leaf"));
-				logger.info("orgCode " + unitJson.getString("orgCode"));
-				logger.info("orgId " + unitJson.getString("orgId"));
-				logger.info("orgName " + unitJson.getString("orgName"));
-				logger.info("orgStatus " + unitJson.getInt("orgStatus"));
-				logger.info("parentOrgId " + unitJson.getString("parentOrgId"));
-				logger.info("remark " + unitJson.getString("remark"));
-				logger.info("\n");
+				if(unitJson.has("changeVersion")){
+					logger.info("changeVersion " + unitJson.getInt("changeVersion"));
+				}
+				if(unitJson.has("enterpriseID")){
+					logger.info("enterpriseID " + unitJson.getInt("enterpriseID"));
+				}
+				if(unitJson.has("leaf")){
+					logger.info("leaf " + unitJson.getInt("leaf"));
+				}
+				if(unitJson.has("orgCode")){
+					logger.info("orgCode " + unitJson.getString("orgCode"));
+				}
+				if(unitJson.has("orgId")){
+					logger.info("orgId " + unitJson.getString("orgId"));
+				}
+				if(unitJson.has("orgName")){
+					logger.info("orgName " + unitJson.getString("orgName"));
+				}
+				if(unitJson.has("orgStatus")){
+					logger.info("orgStatus " + unitJson.getInt("orgStatus"));
+				}
+				if(unitJson.has("parentOrgId")){
+					logger.info("parentOrgId " + unitJson.getString("parentOrgId"));
+				}
+				if(unitJson.has("remark")){
+					logger.info("remark " + unitJson.getString("remark"));
+				}
+				System.out.println();
 				
 				changeVersion = Math.max(changeVersion, unitJson.getInt("changeVersion"));
 			}
