@@ -14,6 +14,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -145,6 +146,60 @@ public class HttpClientUtil {
 	}
 	
 	/**
+	 * 发送JSON数据
+	 * @author lzf
+	 * @param url
+	 * @param headerMap
+	 * @param json 
+	 * @return map HEADER 为响应头(Header)数组,CONTENT为响应体(Content)的HttpEntity对象
+	 */
+	public static Map<String, Object> postJson(String url, Map<String, String> headerMap, JSONObject json) {
+		Map<String, Object> resultMap = new HashMap<>();
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		
+		if(headerMap != null){
+			Iterator<String> it = headerMap.keySet().iterator();
+			while(it.hasNext()){
+				String name = it.next();
+				String value = headerMap.get(name);
+				httpPost.addHeader(name, value);
+			}
+		}
+		
+		try {
+			StringEntity se = new StringEntity(json.toString());
+            se.setContentEncoding("UTF-8");
+            se.setContentType("application/json");
+			httpPost.setEntity(se);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+			
+		try(CloseableHttpResponse resp = client.execute(httpPost);){
+			Header[] headerArr = resp.getAllHeaders();
+			resultMap.put(HEADER, headerArr);
+			for(Header header : headerArr){
+				String name = header.getName();
+				String value = header.getValue();
+				logger.info("Header name {} value {}", name, value);
+			}
+			HttpEntity entity = resp.getEntity();
+			String entityStr = EntityUtils.toString(entity, "UTF-8");
+			resultMap.put(CONTENT, entityStr);
+			
+			if (null != entity) {
+				logger.info(resp.getStatusLine().toString());
+				logger.info("Response content is : \n{}", entityStr);
+			}
+			resp.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return resultMap;
+	}
+	
+	/**
      * map键值对 ——>> key=value&key=value
      * @param parameterMap
      * @return
@@ -200,7 +255,6 @@ public class HttpClientUtil {
 		String accessTokenString = HttpClientUtil.getAccessTokenString(ConfigUtil.configMap.get("tokenUrl"), ConfigUtil.configMap.get("accessType"), ConfigUtil.configMap.get("appID"), ConfigUtil.configMap.get("appSecret"));
 		return accessTokenString;
 	}
-	
 	
 	@SuppressWarnings("unused")
 	private static Map<String, String> convertHeaderArrToMap(Header[] headerArr){
