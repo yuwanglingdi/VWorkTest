@@ -167,14 +167,10 @@ public class HttpClientUtil {
 			}
 		}
 		
-		try {
-			StringEntity se = new StringEntity(json.toString());
-            se.setContentEncoding("UTF-8");
-            se.setContentType("application/json");
-			httpPost.setEntity(se);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		StringEntity se = new StringEntity(json.toString(),"utf-8");
+		se.setContentEncoding("UTF-8");
+		se.setContentType("application/json;charset=UTF-8");
+		httpPost.setEntity(se);
 			
 		try(CloseableHttpResponse resp = client.execute(httpPost);){
 			Header[] headerArr = resp.getAllHeaders();

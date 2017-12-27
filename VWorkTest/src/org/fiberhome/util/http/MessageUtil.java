@@ -42,9 +42,8 @@ public class MessageUtil {
 		
 		String msgUrl = ConfigUtil.configMap.get("msgUrl");
 		Map<String, String> headerMap = new HashMap<>();
-		
 		headerMap.put("access-token", tokenStr);
-		headerMap.put("Content-Type", "application/json");
+		headerMap.put("Content-Type", "application/json;charset=UTF-8");
 		
 		Map<String, Object> resultMap = HttpClientUtil.postJson(msgUrl, headerMap, msgJson);
 		String respStr = resultMap.get(HttpClientUtil.CONTENT).toString();
@@ -53,8 +52,8 @@ public class MessageUtil {
 	
 	public static void main(String[] args) {
 		String senderID = ConfigUtil.configMap.get("appID");
-		String receiverID = "8120272559";
-		String message = "Hello World!";
+		String receiverID = "lzf";
+		String message = "Hello 双喜！";
 		try {
 			MessageUtil.sendTextMessage(senderID, receiverID, message);
 		} catch (JSONException e) {
